@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>闲情逸致空间</title>
+  
+  
+  <link href="/atom.xml" rel="self"/>
+  
+  <link href="http://yoursite.com/"/>
+  <updated>2020-03-18T01:46:23.191Z</updated>
+  <id>http://yoursite.com/</id>
+  
+  <author>
+    <name>Lee</name>
+    
+  </author>
+  
+  <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>demo</title>
+    <link href="http://yoursite.com/2020/03/18/demo/"/>
+    <id>http://yoursite.com/2020/03/18/demo/</id>
+    <published>2020-03-18T01:40:56.378Z</published>
+    <updated>2020-03-18T01:46:23.191Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="集群的生命周期管理"><a href="#集群的生命周期管理" class="headerlink" title="集群的生命周期管理"></a>集群的生命周期管理</h1><ul><li>预上线<ul><li>评估用户的需求及使用场景 / 数据建模 / 容量规划 / 选择合适的部署架构 / 性能测试</li></ul></li><li>上线<ul><li>监控流量 / 定期检查潜在问题 （防患于未然，发现错误的使用方式，及时增加机器）</li><li>对索引进行优化（Index Lifecycle Management），检测是否存在不均衡而导致有部分节点过热</li><li>定期数据备份 / 滚动升级</li></ul></li><li>下架前监控流量，实现 Stage Decommission</li></ul><h1 id="部署的建议"><a href="#部署的建议" class="headerlink" title="部署的建议"></a>部署的建议</h1><ul><li>根据实际场景，选择合适的部署方式，选择合理的硬件配置<ul><li>搜索类</li><li>日志/指标</li></ul></li><li>部署要考虑，反亲和性（Anti-Affinity）<ul><li>尽量将机器分散在不同的机架。例如，3 台 Master 节点必须分散在不同的机架上</li><li>善用 Shard Filtering 进行配置</li></ul></li></ul><h1 id="使用要遵循一定的规范"><a href="#使用要遵循一定的规范" class="headerlink" title="使用要遵循一定的规范"></a>使用要遵循一定的规范</h1><ul><li>Mapping<ul><li>生产环境中索引应考虑禁止 Dynamic Index Mapping，避免过多字段导致 Cluster State 占用过多</li><li>禁止索引自动创建的功能，创建时必须提供 Mapping 或通过 Index Template 进行设定</li></ul></li></ul><p><img src="https://cdn.learnku.com/uploads/images/202003/09/29212/bKMeVDpt1u.png!large" alt="一些运维相关的建议"></p><h1 id="使用要遵循一定的规范-1"><a href="#使用要遵循一定的规范-1" class="headerlink" title="使用要遵循一定的规范"></a>使用要遵循一定的规范</h1><ul><li>设置 Slowlogs，发现一些性能不好，甚至是错误的使用 Pattern<ul><li>例如：错误的将网址映射成 keyword，然后用通配符查询。应该使用 Text，结合 URL 分词器</li><li>严禁一切 “*” 开头的通配符查询</li></ul></li></ul><h1 id="对重要的数据进行备份"><a href="#对重要的数据进行备份" class="headerlink" title="对重要的数据进行备份"></a>对重要的数据进行备份</h1><ul><li>集群备份</li><li><a href="https://www.elastic.co/guide/en/elasticsearch/reference/7.1/modules-snapshots.html">https://www.elastic.co/guide/en/elasticsearch/reference/7.1/modules-snapshots.html</a></li></ul><h1 id="定期更新到新版本"><a href="#定期更新到新版本" class="headerlink" title="定期更新到新版本"></a>定期更新到新版本</h1><ul><li>ES 在新版本中会持续对性能作出优化；提供更多的新功能<ul><li>Circuit breaker 实现的改进</li></ul></li><li>修复一些已知的 bug 和安全隐患</li></ul><h1 id="ES-的版本"><a href="#ES-的版本" class="headerlink" title="ES 的版本"></a>ES 的版本</h1><ul><li>Elasticsearch 的版本格式是： X.Y.Z <ul><li>X: Major</li><li>Y: Minor</li><li>Z: Patch </li></ul></li><li>Elasticsearch 可以使用上一个主版本的索引<ul><li>7.x 可以使用 6.x / 7.x 不支持使用 5.x</li><li>5.x 可以使用 2.x</li></ul></li></ul><h1 id="Rolling-Upgrade-v-s-Full-Cluster-Restart"><a href="#Rolling-Upgrade-v-s-Full-Cluster-Restart" class="headerlink" title="Rolling Upgrade v.s Full Cluster Restart"></a>Rolling Upgrade v.s Full Cluster Restart</h1><ul><li>Rolling Upgrade<ul><li>没有 Downtime</li><li><a href="https://www.elastic.co/guide/en/elasticsearch/reference/7.1/rolling-upgrades.html">https://www.elastic.co/guide/en/elasticsearch/reference/7.1/rolling-upgrades.html</a></li></ul></li><li>Full Cluster Restart<ul><li>集群在更新期间不可用</li><li>升级更快</li></ul></li></ul><h1 id="Full-Restart-的步骤"><a href="#Full-Restart-的步骤" class="headerlink" title="Full Restart 的步骤"></a>Full Restart 的步骤</h1><ul><li>停止索引数据，同时备份集群</li><li>Disable Shard Allocation （Persistent）</li><li>执行 Synced Flush</li><li>关闭并更新所有节点</li><li>先运行所有 Master 节点 / 再运行其他节点</li><li>等集群变黄后打开 Shard Allocation</li></ul><p><img src="https://cdn.learnku.com/uploads/images/202003/09/29212/92H2uWuc6k.png!large" alt="一些运维相关的建议"></p><h2 id="移动分片"><a href="#移动分片" class="headerlink" title="移动分片"></a>移动分片</h2><ul><li>从一个节点移动分片到另外一个节点</li><li>使用场景：<ul><li>当一个数据节点上有过多 Hot Shards；可以通过手 动分配分片到特定的节点解决</li></ul></li></ul><p><img src="https://cdn.learnku.com/uploads/images/202003/09/29212/zx0MYIsuwh.png!large" alt="一些运维相关的建议"></p><h2 id="从集群中移除一个节点"><a href="#从集群中移除一个节点" class="headerlink" title="从集群中移除一个节点"></a>从集群中移除一个节点</h2><ul><li>使用场景：当你想移除一个节点，或者对一个机器进行维护。同时你又不希望导致集群的颜色变 黄或者变红</li></ul><p><img src="https://cdn.learnku.com/uploads/images/202003/09/29212/1d0uHiMbPD.png!large" alt="一些运维相关的建议"></p><h2 id="控制-Allocation-和-Recovery"><a href="#控制-Allocation-和-Recovery" class="headerlink" title="控制 Allocation 和 Recovery"></a>控制 Allocation 和 Recovery</h2><ul><li>使用场景：控制 Allocation 和 Recovery 的速率</li></ul><p><img src="https://cdn.learnku.com/uploads/images/202003/09/29212/zfFsAaccf8.png!large" alt="一些运维相关的建议"></p><h2 id="Synced-Flush"><a href="#Synced-Flush" class="headerlink" title="Synced Flush"></a>Synced Flush</h2><ul><li>使用场景：需要重启一个节点。<ul><li>通过 synced flush，可以在索引上放置一个 sync ID。这样可以提供这些分片的 Recovery 的时间</li></ul></li></ul><p><img src="https://cdn.learnku.com/uploads/images/202003/09/29212/chhu5MIvSq.png!large" alt="一些运维相关的建议"></p><h2 id="清空节点上的缓存"><a href="#清空节点上的缓存" class="headerlink" title="清空节点上的缓存"></a>清空节点上的缓存</h2><ul><li>使用场景：节点上出现了高内存占用。可以执行清除缓存的操作。这个操作会影响集群的性能，但是会避免你的集群出现 OOM 的问题<br><img src="https://cdn.learnku.com/uploads/images/202003/09/29212/SnU0y43slR.png!large" alt="一些运维相关的建议"><h2 id="控制搜索的队列"><a href="#控制搜索的队列" class="headerlink" title="控制搜索的队列"></a>控制搜索的队列</h2></li><li>使用场景：当搜索的响应时间过长，看到有“reject” 指标的增加，都可以适当增加该数值</li></ul><p><img src="https://cdn.learnku.com/uploads/images/202003/09/29212/MW3yUC34nu.png!large" alt="一些运维相关的建议"></p><h2 id="设置-Circuit-Breaker"><a href="#设置-Circuit-Breaker" class="headerlink" title="设置 Circuit Breaker"></a>设置 Circuit Breaker</h2><ul><li>使用场景：设置各类 Circuit Breaker。避免 OOM 的发生</li></ul><p><img src="https://cdn.learnku.com/uploads/images/202003/09/29212/E83WiWMvhN.png!large" alt="一些运维相关的建议"></p><h1 id="运维建议"><a href="#运维建议" class="headerlink" title="运维建议"></a>运维建议</h1><ul><li><p>了解用户场景，选择合适部署</p></li><li><p>定期检查，发现潜在问题</p></li><li><p>对重要的数据进行备份</p></li><li><p>保持版本升级</p></li></ul>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h1 id=&quot;集群的生命周期管理&quot;&gt;&lt;a href=&quot;#集群的生命周期管理&quot; class=&quot;headerlink&quot; title=&quot;集群的生命周期管理&quot;&gt;&lt;/a&gt;集群的生命周期管理&lt;/h1&gt;&lt;ul&gt;
+&lt;li&gt;预上线&lt;ul&gt;
+&lt;li&gt;评估用户的需求及使用场景 / 数据建模 / 容量
+      
+    
+    </summary>
+    
+    
+    
+  </entry>
+  
+</feed>

@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html  lang="zh">
+<head>
+    <meta charset="utf-8" />
+
+<meta name="generator" content="Hexo 4.2.0" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+
+<title>闲情逸致空间</title>
+
+
+
+
+
+
+
+
+<link rel="icon" href="/images/favicon.svg">
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.7.2/css/bulma.css">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Ubuntu:400,600|Source+Code+Pro">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css">
+
+
+    
+    
+<style>body>.footer,body>.navbar,body>.section{opacity:0}</style>
+
+    
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/css/lightgallery.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/css/justifiedGallery.min.css">
+
+    
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/outdatedbrowser@1.1.5/outdatedbrowser/outdatedbrowser.min.css">
+
+    
+    
+    
+    
+<link rel="stylesheet" href="/css/back-to-top.css">
+
+    
+    
+    
+    
+    
+    
+    
+    <link rel="stylesheet" href="/css/progressbar.css">
+<script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
+    
+    
+    
+
+
+<link rel="stylesheet" href="/css/style.css">
+<link rel="alternate" href="/atom.xml" title="闲情逸致空间" type="application/atom+xml">
+</head>
+<body class="is-3-column">
+    <nav class="navbar navbar-main">
+    <div class="container">
+        <div class="navbar-brand is-flex-center">
+            <a class="navbar-item navbar-logo" href="/">
+            
+                <img src="/images/logo.svg" alt="闲情逸致空间" height="28">
+            
+            </a>
+        </div>
+        <div class="navbar-menu">
+            
+            <div class="navbar-start">
+                
+                <a class="navbar-item is-active"
+                href="/">主页</a>
+                
+                <a class="navbar-item"
+                href="/archives">归档</a>
+                
+                <a class="navbar-item"
+                href="/categories">分类</a>
+                
+                <a class="navbar-item"
+                href="/tags">标签</a>
+                
+            </div>
+            
+            <div class="navbar-end">
+                
+                
+                
+                <a class="navbar-item search" title="Suche" href="javascript:;">
+                    <i class="fas fa-search"></i>
+                </a>
+                
+            </div>
+        </div>
+    </div>
+</nav>
+    
+    <section class="section">
+        <div class="container">
+            <div class="columns">
+                <div class="column is-8-tablet is-8-desktop is-6-widescreen has-order-2 column-main">
+    
+<div class="card">
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2020-03-18T01:40:56.378Z">2020-03-18</time>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    8 minutes lesen (Über 1144 Worte)
+                </span>
+                
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                <a class="has-link-black-ter" href="/2020/03/18/demo/">demo</a>
+            
+        </h1>
+        <div class="content">
+            <h1 id="集群的生命周期管理"><a href="#集群的生命周期管理" class="headerlink" title="集群的生命周期管理"></a>集群的生命周期管理</h1><ul>
+<li>预上线<ul>
+<li>评估用户的需求及使用场景 / 数据建模 / 容量规划 / 选择合适的部署架构 / 性能测试</li>
+</ul>
+</li>
+<li>上线<ul>
+<li>监控流量 / 定期检查潜在问题 （防患于未然，发现错误的使用方式，及时增加机器）</li>
+<li>对索引进行优化（Index Lifecycle Management），检测是否存在不均衡而导致有部分节点过热</li>
+<li>定期数据备份 / 滚动升级</li>
+</ul>
+</li>
+<li>下架前监控流量，实现 Stage Decommission</li>
+</ul>
+<h1 id="部署的建议"><a href="#部署的建议" class="headerlink" title="部署的建议"></a>部署的建议</h1><ul>
+<li>根据实际场景，选择合适的部署方式，选择合理的硬件配置<ul>
+<li>搜索类</li>
+<li>日志/指标</li>
+</ul>
+</li>
+<li>部署要考虑，反亲和性（Anti-Affinity）<ul>
+<li>尽量将机器分散在不同的机架。例如，3 台 Master 节点必须分散在不同的机架上</li>
+<li>善用 Shard Filtering 进行配置</li>
+</ul>
+</li>
+</ul>
+<h1 id="使用要遵循一定的规范"><a href="#使用要遵循一定的规范" class="headerlink" title="使用要遵循一定的规范"></a>使用要遵循一定的规范</h1><ul>
+<li>Mapping<ul>
+<li>生产环境中索引应考虑禁止 Dynamic Index Mapping，避免过多字段导致 Cluster State 占用过多</li>
+<li>禁止索引自动创建的功能，创建时必须提供 Mapping 或通过 Index Template 进行设定</li>
+</ul>
+</li>
+</ul>
+<p><img src="https://cdn.learnku.com/uploads/images/202003/09/29212/bKMeVDpt1u.png!large" alt="一些运维相关的建议"></p>
+<h1 id="使用要遵循一定的规范-1"><a href="#使用要遵循一定的规范-1" class="headerlink" title="使用要遵循一定的规范"></a>使用要遵循一定的规范</h1><ul>
+<li>设置 Slowlogs，发现一些性能不好，甚至是错误的使用 Pattern<ul>
+<li>例如：错误的将网址映射成 keyword，然后用通配符查询。应该使用 Text，结合 URL 分词器</li>
+<li>严禁一切 “*” 开头的通配符查询</li>
+</ul>
+</li>
+</ul>
+<h1 id="对重要的数据进行备份"><a href="#对重要的数据进行备份" class="headerlink" title="对重要的数据进行备份"></a>对重要的数据进行备份</h1><ul>
+<li>集群备份</li>
+<li><a href="https://www.elastic.co/guide/en/elasticsearch/reference/7.1/modules-snapshots.html">https://www.elastic.co/guide/en/elasticsearch/reference/7.1/modules-snapshots.html</a></li>
+</ul>
+<h1 id="定期更新到新版本"><a href="#定期更新到新版本" class="headerlink" title="定期更新到新版本"></a>定期更新到新版本</h1><ul>
+<li>ES 在新版本中会持续对性能作出优化；提供更多的新功能<ul>
+<li>Circuit breaker 实现的改进</li>
+</ul>
+</li>
+<li>修复一些已知的 bug 和安全隐患</li>
+</ul>
+<h1 id="ES-的版本"><a href="#ES-的版本" class="headerlink" title="ES 的版本"></a>ES 的版本</h1><ul>
+<li>Elasticsearch 的版本格式是： X.Y.Z <ul>
+<li>X: Major</li>
+<li>Y: Minor</li>
+<li>Z: Patch </li>
+</ul>
+</li>
+<li>Elasticsearch 可以使用上一个主版本的索引<ul>
+<li>7.x 可以使用 6.x / 7.x 不支持使用 5.x</li>
+<li>5.x 可以使用 2.x</li>
+</ul>
+</li>
+</ul>
+<h1 id="Rolling-Upgrade-v-s-Full-Cluster-Restart"><a href="#Rolling-Upgrade-v-s-Full-Cluster-Restart" class="headerlink" title="Rolling Upgrade v.s Full Cluster Restart"></a>Rolling Upgrade v.s Full Cluster Restart</h1><ul>
+<li>Rolling Upgrade<ul>
+<li>没有 Downtime</li>
+<li><a href="https://www.elastic.co/guide/en/elasticsearch/reference/7.1/rolling-upgrades.html">https://www.elastic.co/guide/en/elasticsearch/reference/7.1/rolling-upgrades.html</a></li>
+</ul>
+</li>
+<li>Full Cluster Restart<ul>
+<li>集群在更新期间不可用</li>
+<li>升级更快</li>
+</ul>
+</li>
+</ul>
+<h1 id="Full-Restart-的步骤"><a href="#Full-Restart-的步骤" class="headerlink" title="Full Restart 的步骤"></a>Full Restart 的步骤</h1><ul>
+<li>停止索引数据，同时备份集群</li>
+<li>Disable Shard Allocation （Persistent）</li>
+<li>执行 Synced Flush</li>
+<li>关闭并更新所有节点</li>
+<li>先运行所有 Master 节点 / 再运行其他节点</li>
+<li>等集群变黄后打开 Shard Allocation</li>
+</ul>
+<p><img src="https://cdn.learnku.com/uploads/images/202003/09/29212/92H2uWuc6k.png!large" alt="一些运维相关的建议"></p>
+<h2 id="移动分片"><a href="#移动分片" class="headerlink" title="移动分片"></a>移动分片</h2><ul>
+<li>从一个节点移动分片到另外一个节点</li>
+<li>使用场景：<ul>
+<li>当一个数据节点上有过多 Hot Shards；可以通过手 动分配分片到特定的节点解决</li>
+</ul>
+</li>
+</ul>
+<p><img src="https://cdn.learnku.com/uploads/images/202003/09/29212/zx0MYIsuwh.png!large" alt="一些运维相关的建议"></p>
+<h2 id="从集群中移除一个节点"><a href="#从集群中移除一个节点" class="headerlink" title="从集群中移除一个节点"></a>从集群中移除一个节点</h2><ul>
+<li>使用场景：当你想移除一个节点，或者对一个机器进行维护。同时你又不希望导致集群的颜色变 黄或者变红</li>
+</ul>
+<p><img src="https://cdn.learnku.com/uploads/images/202003/09/29212/1d0uHiMbPD.png!large" alt="一些运维相关的建议"></p>
+<h2 id="控制-Allocation-和-Recovery"><a href="#控制-Allocation-和-Recovery" class="headerlink" title="控制 Allocation 和 Recovery"></a>控制 Allocation 和 Recovery</h2><ul>
+<li>使用场景：控制 Allocation 和 Recovery 的速率</li>
+</ul>
+<p><img src="https://cdn.learnku.com/uploads/images/202003/09/29212/zfFsAaccf8.png!large" alt="一些运维相关的建议"></p>
+<h2 id="Synced-Flush"><a href="#Synced-Flush" class="headerlink" title="Synced Flush"></a>Synced Flush</h2><ul>
+<li>使用场景：需要重启一个节点。<ul>
+<li>通过 synced flush，可以在索引上放置一个 sync ID。这样可以提供这些分片的 Recovery 的时间</li>
+</ul>
+</li>
+</ul>
+<p><img src="https://cdn.learnku.com/uploads/images/202003/09/29212/chhu5MIvSq.png!large" alt="一些运维相关的建议"></p>
+<h2 id="清空节点上的缓存"><a href="#清空节点上的缓存" class="headerlink" title="清空节点上的缓存"></a>清空节点上的缓存</h2><ul>
+<li>使用场景：节点上出现了高内存占用。可以执行清除缓存的操作。这个操作会影响集群的性能，但是会避免你的集群出现 OOM 的问题<br><img src="https://cdn.learnku.com/uploads/images/202003/09/29212/SnU0y43slR.png!large" alt="一些运维相关的建议"><h2 id="控制搜索的队列"><a href="#控制搜索的队列" class="headerlink" title="控制搜索的队列"></a>控制搜索的队列</h2></li>
+<li>使用场景：当搜索的响应时间过长，看到有“reject” 指标的增加，都可以适当增加该数值</li>
+</ul>
+<p><img src="https://cdn.learnku.com/uploads/images/202003/09/29212/MW3yUC34nu.png!large" alt="一些运维相关的建议"></p>
+<h2 id="设置-Circuit-Breaker"><a href="#设置-Circuit-Breaker" class="headerlink" title="设置 Circuit Breaker"></a>设置 Circuit Breaker</h2><ul>
+<li>使用场景：设置各类 Circuit Breaker。避免 OOM 的发生</li>
+</ul>
+<p><img src="https://cdn.learnku.com/uploads/images/202003/09/29212/E83WiWMvhN.png!large" alt="一些运维相关的建议"></p>
+<h1 id="运维建议"><a href="#运维建议" class="headerlink" title="运维建议"></a>运维建议</h1><ul>
+<li><p>了解用户场景，选择合适部署</p>
+</li>
+<li><p>定期检查，发现潜在问题</p>
+</li>
+<li><p>对重要的数据进行备份</p>
+</li>
+<li><p>保持版本升级</p>
+</li>
+</ul>
+
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+
+
+
+
+
+</div>
+                
+
+
+
+
+<div class="column is-4-tablet is-4-desktop is-3-widescreen  has-order-1 column-left ">
+    
+        
+<div class="card widget">
+    <div class="card-content">
+        <nav class="level">
+            <div class="level-item has-text-centered" style="flex-shrink: 1">
+                <div>
+                    
+                    <figure class="image is-128x128 has-mb-6">
+                        <img class="" src="/images/avatar.png" alt="Lee Sunke">
+                    </figure>
+                    
+                    <p class="is-size-4 is-block">
+                        Lee Sunke
+                    </p>
+                    
+                    
+                    <p class="is-size-6 is-block">
+                        不在写BUG就是在改BUG
+                    </p>
+                    
+                    
+                    <p class="is-size-6 is-flex is-flex-center has-text-grey">
+                        <i class="fas fa-map-marker-alt has-mr-7"></i>
+                        <span>浙江</span>
+                    </p>
+                    
+                </div>
+            </div>
+        </nav>
+        <nav class="level is-mobile">
+            <div class="level-item has-text-centered is-marginless">
+                <div>
+                    <p class="heading">
+                        Post
+                    </p>
+                    <a href="/archives">
+                        <p class="title has-text-weight-normal">
+                            1
+                        </p>
+                    </a>
+                </div>
+            </div>
+            <div class="level-item has-text-centered is-marginless">
+                <div>
+                    <p class="heading">
+                        Kategorien
+                    </p>
+                    <a href="/categories">
+                        <p class="title has-text-weight-normal">
+                            0
+                        </p>
+                    </a>
+                </div>
+            </div>
+            <div class="level-item has-text-centered is-marginless">
+                <div>
+                    <p class="heading">
+                        Tags
+                    </p>
+                    <a href="/tags">
+                        <p class="title has-text-weight-normal">
+                            0
+                        </p>
+                    </a>
+                </div>
+            </div>
+        </nav>
+        
+        
+        
+        <div class="level is-mobile">
+            
+            <a class="level-item button is-white is-marginless" target="_blank" rel="noopener"
+                title="Github" href="https://github.com/CrazyZard">
+                
+                <i class="fab fa-github"></i>
+                
+            </a>
+            
+        </div>
+        
+    </div>
+</div>
+    
+        
+    
+        
+    
+    
+        <div class="column-right-shadow is-hidden-widescreen ">
+        
+            <div class="card widget">
+    <div class="card-content">
+        <h3 class="menu-label">
+            Letzte Einträge
+        </h3>
+        
+        <article class="media">
+            
+            <a href="/2020/03/18/demo/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="demo">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-03-18T01:40:56.378Z">2020-03-18</time></div>
+                    <a href="/2020/03/18/demo/" class="title has-link-black-ter is-size-6 has-text-weight-normal">demo</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+    </div>
+</div>
+        
+            <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+        <h3 class="menu-label">
+            Archive
+        </h3>
+        <ul class="menu-list">
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2020/03/">
+                <span class="level-start">
+                    <span class="level-item">March 2020</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        </ul>
+        </div>
+    </div>
+</div>
+        
+            <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+            <h3 class="menu-label">
+                Tags
+            </h3>
+            <div class="field is-grouped is-grouped-multiline">
+                
+            </div>
+        </div>
+    </div>
+</div>
+        
+        </div>
+    
+</div>
+
+                
+
+
+
+
+<div class="column is-4-tablet is-4-desktop is-3-widescreen is-hidden-touch is-hidden-desktop-only has-order-3 column-right ">
+    
+        <div class="card widget">
+    <div class="card-content">
+        <h3 class="menu-label">
+            Letzte Einträge
+        </h3>
+        
+        <article class="media">
+            
+            <a href="/2020/03/18/demo/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="demo">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-03-18T01:40:56.378Z">2020-03-18</time></div>
+                    <a href="/2020/03/18/demo/" class="title has-link-black-ter is-size-6 has-text-weight-normal">demo</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+    </div>
+</div>
+    
+        <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+        <h3 class="menu-label">
+            Archive
+        </h3>
+        <ul class="menu-list">
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2020/03/">
+                <span class="level-start">
+                    <span class="level-item">March 2020</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        </ul>
+        </div>
+    </div>
+</div>
+    
+        <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+            <h3 class="menu-label">
+                Tags
+            </h3>
+            <div class="field is-grouped is-grouped-multiline">
+                
+            </div>
+        </div>
+    </div>
+</div>
+    
+    
+</div>
+
+            </div>
+        </div>
+    </section>
+    <footer class="footer">
+    <div class="container">
+        <div class="level">
+            <div class="level-start has-text-centered-mobile">
+                <a class="footer-logo is-block has-mb-6" href="/">
+                
+                    <img src="/images/logo.svg" alt="闲情逸致空间" height="28">
+                
+                </a>
+                <p class="is-size-7">
+                &copy; 2020 Lee&nbsp;
+                Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> & <a
+                        href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a>
+                
+                </p>
+            </div>
+            <div class="level-end">
+            
+            </div>
+        </div>
+    </div>
+</footer>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script>
+<script>moment.locale("zh-Hans");</script>
+
+
+<script>
+var IcarusThemeSettings = {
+    site: {
+        url: 'http://yoursite.com',
+        external_link: {"enable":true,"exclude":[]}
+    },
+    article: {
+        highlight: {
+            clipboard: true,
+            fold: 'unfolded'
+        }
+    }
+};
+</script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script>
+
+
+
+
+
+<script src="/js/animation.js"></script>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/js/lightgallery.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js" defer></script>
+<script src="/js/gallery.js" defer></script>
+
+
+
+<div id="outdated">
+    <h6>Your browser is out-of-date!</h6>
+    <p>Update your browser to view this website correctly. <a id="btnUpdateBrowser" href="http://outdatedbrowser.com/">Update
+            my browser now </a></p>
+    <p class="last"><a href="#" id="btnCloseUpdateBrowser" title="Close">&times;</a></p>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/outdatedbrowser@1.1.5/outdatedbrowser/outdatedbrowser.min.js" defer></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        outdatedBrowser({
+            bgColor: '#f25648',
+            color: '#ffffff',
+            lowerThan: 'flex'
+        });
+    });
+</script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/unpacked/MathJax.js?config=TeX-MML-AM_CHTML" defer></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    MathJax.Hub.Config({
+        'HTML-CSS': {
+            matchFontHeight: false
+        },
+        SVG: {
+            matchFontHeight: false
+        },
+        CommonHTML: {
+            matchFontHeight: false
+        },
+        tex2jax: {
+            inlineMath: [
+                ['$','$'],
+                ['\\(','\\)']
+            ]
+        }
+    });
+});
+</script>
+
+
+<a id="back-to-top" title="Zurück nach oben" href="javascript:;">
+    <i class="fas fa-chevron-up"></i>
+</a>
+<script src="/js/back-to-top.js" defer></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="/js/main.js" defer></script>
+
+    
+    <div class="searchbox ins-search">
+    <div class="searchbox-container ins-search-container">
+        <div class="searchbox-input-wrapper">
+            <input type="text" class="searchbox-input ins-search-input" placeholder="Tippen Sie etwas..." />
+            <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="searchbox-result-wrapper ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+    (function (window) {
+        var INSIGHT_CONFIG = {
+            TRANSLATION: {
+                POSTS: 'Posts',
+                PAGES: 'Seiten',
+                CATEGORIES: 'Kategorien',
+                TAGS: 'Tags',
+                UNTITLED: '(Unbenannt)',
+            },
+            CONTENT_URL: '/content.json',
+        };
+        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+    })(window);
+</script>
+<script src="/js/insight.js" defer></script>
+<link rel="stylesheet" href="/css/search.css">
+<link rel="stylesheet" href="/css/insight.css">
+    
+</body>
+</html>
